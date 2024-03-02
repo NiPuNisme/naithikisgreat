@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="rps.css">
+    <style>
+        .rps-container {
+            background: linear-gradient(to bottom, #ff0000, #ffff00);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .choices {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        button.game-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            transition: transform 0.2s ease;
+        }
+
+        button.game-btn:hover {
+            background-color: #0e81ce;
+            transform: scale(1.1);
+        }
+
+        #output-rps {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        img {
+            max-width: 100px;
+            height: auto;
+            margin: 10px;
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25%, 75% {
+                transform: translateX(-5px);
+            }
+            50% {
+                transform: translateX(5px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out 3;
+        }
+
+        /* Your additional CSS code */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .game-btn, .reset-btn {
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .game-btn {
+            background-color: #2196F3;
+            color: #fff;
+            transition: transform 0.2s ease;
+        }
+
+        .game-btn:hover {
+            background-color: #0e81ce;
+            transform: scale(1.1);
+        }
+
+        .reset-btn {
+            background-color: #f44336;
+            color: #fff;
+            transition: transform 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background-color: #d32f2f;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="rps-container">
+        <h1>Rock Paper Scissors</h1>
+        <div id="output-rps">
+            <img id="playerChoiceImg" src="https://rock-paper-scissors-lilac-alpha.vercel.app/static/media/rock.png" alt="Player">
+            <img id="computerChoiceImg" src="https://rock-paper-scissors-lilac-alpha.vercel.app/static/media/rock.png" alt="Computer">
+        </div>
+        <div id="score">Score: 0 | Ties: 0 | Losses: 0</div>
+        <div class="choices">
+            <button class="game-btn" onclick="playGame('rock')">Rock</button>
+            <button class="game-btn" onclick="playGame('paper')">Paper</button>
+            <button class="game-btn" onclick="playGame('scissors')">Scissors</button>
+        </div>
+        <div class="button-container">
+            <button class="reset-btn" onclick="resetGame()">Reset</button>
+        </div>
+    </div>
+    <script src="rps.js"></script>
+    <script>
+        let score = 0;
+        let ties = 0;
+        let losses = 0;
+
+        function playGame(playerChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            // Shake the rock image thrice
+            if (playerChoice === 'rock') {
+                const playerChoiceImg = document.getElementById('playerChoiceImg');
+                playerChoiceImg.classList.add('shake');
+                setTimeout(() => {
+                    playerChoiceImg.classList.remove('shake');
+                }, 1500); // Adjust the timeout based on the animation duration
+            }
+
+            // Update the player's and computer's choices using images
+            document.getElementById('output-rps').innerHTML = '<img id="playerChoiceImg" src="https://rock-paper-scissors-lilac-alpha.vercel.app/static/media/' + playerChoice + '.png" alt="Player">';
+            document.getElementById('output-rps').innerHTML += '<img id="computerChoiceImg" src="https://rock-paper-scissors-lilac-alpha.vercel.app/static/media/' + computerChoice + '.png" alt="Computer">';
+
+            let result = '';
+
+            // Add your logic to determine the result based on playerChoice and computerChoice
+            if (playerChoice === computerChoice) {
+                result = 'It\'s a tie!';
+                ties++;
+            } else if (
+                (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                (playerChoice === 'paper' && computerChoice === 'rock') ||
+                (playerChoice === 'scissors' && computerChoice === 'paper')
+            ) {
+                result = 'You win!';
+                score++;
+            } else {
+                result = 'Computer wins!';
+                losses++;
+            }
+
+            // Display the result and update the scores
+            document.getElementById('output-rps').innerHTML += '<br>' + result;
+            updateScores();
+        }
+
+        function resetGame() {
+            score = 0;
+            ties = 0;
+            losses = 0;
+            updateScores();
+        }
+
+        function updateScores() {
+            document.getElementById('score').innerHTML = 'Score: ' + score + ' | Ties: ' + ties + ' | Losses: ' + losses;
+        }
+    </script>
+</body>
+</html>
